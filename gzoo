@@ -1,0 +1,43 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+use List::Util qw/max/;
+
+$^F = 1000;
+my %PIPES;
+
+for my $arg (@ARGV) {
+	if ($arg =~ /\.gz\z/ && -f $arg) {
+		$arg = turn_me_fifo($arg);
+	}
+}
+
+exec @ARGV;
+exit 1;
+
+sub turn_me_fifo {
+	my ($gz_fn) = @_;
+
+	return fork_to_gzip($gz_fn);
+}
+
+sub fork_to_gzip {
+	my ($gz_fn) = @_;
+
+	pipe my $read, my $write
+		or die "cannot pipe: $!\n";
+
+	my $pid = fork;
+	die "cannot fork: $!\n" unless defined $pid;
+	if ($pid) {
+		$PIPES{$pid} = $read;
+		return '/proc/self/fd/'.fileno($read);
+	}
+
+	open STDOUT, '>&', $write
+		or die "cannot dup pipe to STDOUT: $!\n";
+
+	exec qw/gzip -cd/, $gz_fn;
+	exit 1;
+}
