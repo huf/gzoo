@@ -13,6 +13,12 @@ The command is then executed with the new argument list and may do what it will.
 `--cat`
 > The program is now a cat. Your move.
 
+`--kecske` (or `--goat`)
+> What does a goat say in english?
+
+`--version` or `-v`
+> ...
+
 ## Example
     # you type:
     $ gzoo cat a b.gz
