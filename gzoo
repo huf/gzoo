@@ -32,6 +32,7 @@ sub fork_to_gzip {
 
 		fcntl $_, F_SETFD, $f&~FD_CLOEXEC
 			or die "cannot fcntl-unset FD_CLOEXEC: $!\n";
+	}
 
 	my $pid = fork;
 	die "cannot fork: $!\n" unless defined $pid;
