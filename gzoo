@@ -30,18 +30,12 @@ EOS
 
 for my $arg (@ARGV) {
 	if ($arg =~ /\.gz\z/ && -f $arg) {
-		$arg = turn_me_fifo($arg);
+		$arg = fork_to_gzip($arg);
 	}
 }
 
 exec @ARGV;
 exit 1;
-
-sub turn_me_fifo {
-	my ($gz_fn) = @_;
-
-	return fork_to_gzip($gz_fn);
-}
 
 my %PIPES;
 sub fork_to_gzip {
