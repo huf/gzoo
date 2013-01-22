@@ -29,8 +29,9 @@ EOS
 }
 
 for my $arg (@ARGV) {
-	if ($arg =~ /\.(gz|bz2)\z/ && -f $arg) {
-		$arg = fork_to_zip($arg,$1);
+	if (my ($ext) = $arg =~ /\.(gz|bz2)\z/ and -f $arg) {
+		$ext =~ s/z/zip/;
+		$arg = fork_to_zip($arg, $ext);
 	}
 }
 
@@ -39,7 +40,7 @@ exit 1;
 
 my %PIPES;
 sub fork_to_zip {
-	my ($z_fn,$cmd) = @_;
+	my ($z_fn, $cmd) = @_;
 
 	pipe my $read, my $write
 		or die "cannot pipe: $!\n";
@@ -62,7 +63,6 @@ sub fork_to_zip {
 	open STDOUT, '>&', $write
 		or die "cannot dup pipe to STDOUT: $!\n";
 
-	$cmd =~ s/z/zip/;
-	exec ($cmd,'-cd',$z_fn);
+	exec $cmd, '-cd', $z_fn;
 	exit 1;
 }
