@@ -2,12 +2,16 @@
 gzoo - transparently decompress gzipped files
 
 ## Synopsis
-    gzoo <COMMAND> [ARG0, ARG1, ...]
+    gzoo [OPTIONS] <COMMAND> [ARG0, ARG1, ...]
 
 ## Description
 Allows a command to read from gzipped files, even if it cannot itself gunzip said files.
 All arguments ending in ".gz" and representing regular files will be replaced with special filenames (/proc/self/fd/N). Reading from these files will return the decompressed content of the argument they replace.
 The command is then executed with the new argument list and may do what it will.
+
+## Options
+`--cat`
+> The program is now a cat. Your move.
 
 ## Example
     # you type:

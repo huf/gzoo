@@ -4,6 +4,30 @@ use warnings;
 
 use Fcntl;
 
+if (@ARGV && $ARGV[0] eq '--cat') {
+	print <<'EOS';
+THE PROGRAM IS NOW A GIANT CAT!
+                      _
+                      \`*-.
+                       )  _`-.
+                      .  : `. .
+                      : _   '  \
+                      ; *` _.   `*-._
+                      `-.-'          `-.
+ _._     _,-'""`-._      ;       `       `.
+(,-.`._,'(       |\`-/|  :.       .        \
+    `-.-' \ )-`( , o o)  . \  .   :   .-'   .
+          `-    \`_`"'-  '  `+.;  ;  '      :
+                        :  '  |    ;       ;-.
+                        ; '   : :`-:     _.`* ;
+                     .*' /  .*' ; .*`- +'  `*'
+                     `*-*   `*-*  `*-*'
+
+SEE WHAT YOU DID TO SCARED KITTY?
+EOS
+	exit 9;
+}
+
 for my $arg (@ARGV) {
 	if ($arg =~ /\.gz\z/ && -f $arg) {
 		$arg = turn_me_fifo($arg);
