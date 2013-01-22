@@ -2,10 +2,7 @@
 use strict;
 use warnings;
 
-use List::Util qw/max/;
-
-$^F = 1000;
-my %PIPES;
+use Fcntl;
 
 for my $arg (@ARGV) {
 	if ($arg =~ /\.gz\z/ && -f $arg) {
@@ -22,16 +19,19 @@ sub turn_me_fifo {
 	return fork_to_gzip($gz_fn);
 }
 
+my %PIPES;
 sub fork_to_gzip {
 	my ($gz_fn) = @_;
 
 	pipe my $read, my $write
 		or die "cannot pipe: $!\n";
 
+	fcntl $_, F_SETFD, 0 for $read, $write;
+
 	my $pid = fork;
 	die "cannot fork: $!\n" unless defined $pid;
 	if ($pid) {
-		$PIPES{$pid} = $read;
+		$PIPES{$pid} = $read; # protect from gc
 		return '/proc/self/fd/'.fileno($read);
 	}
 
