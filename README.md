@@ -18,6 +18,7 @@ The command is then executed with the new argument list and may do what it will.
 
 `--version` or `-v`
 > ...
+
 `--help` or `-h`
 > some
 
