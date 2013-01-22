@@ -4,12 +4,20 @@ use warnings;
 
 use Fcntl;
 
-our $VERSION = '2.9.KECSKE';
+our $VERSION = '2.9.KECSKE.0-seriously?';
 
 die "$0 v$VERSION\n" if @ARGV and $ARGV[0] eq '--version' || $ARGV[0] eq '-v';
 
+if (@ARGV and $ARGV[0] eq '--help' || $ARGV[0] eq '-h') {
+	print <<"HALP";
+$0 [OPTIONS] <COMMAND> [ARGS]
+    now go away.
+HALP
+	exit 0x68;
+}
+
 if (@ARGV && $ARGV[0] eq '--cat') {
-	print <<'EOS';
+	print <<'MEOW';
 THE PROGRAM IS NOW A GIANT CAT!
                       _
                       \`*-.
@@ -28,12 +36,12 @@ THE PROGRAM IS NOW A GIANT CAT!
                      `*-*   `*-*  `*-*'
 
 SEE WHAT YOU DID TO SCARED KITTY?
-EOS
+MEOW
 	exit 9;
 }
 
 if (@ARGV and $ARGV[0] eq '--goat' || $ARGV[0] eq '--kecske') {
-	print <<'EOS';
+	print <<'WHAT_DOES_IT_SAY';
 KECS
       /)  (\
  )\.:::::::::./(
@@ -55,7 +63,7 @@ KECS
      // .-'.-'  (
      ||(__(__.-._)
 KE
-EOS
+WHAT_DOES_IT_SAY
 	exit 2;
 }
 
@@ -86,6 +94,7 @@ sub fork_to_zip {
 
 	my $pid = fork;
 	die "cannot fork: $!\n" unless defined $pid;
+
 	if ($pid) {
 		$PIPES{$pid} = $read; # protect from gc
 		return '/proc/self/fd/'.fileno($read);
