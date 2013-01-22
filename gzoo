@@ -29,8 +29,8 @@ EOS
 }
 
 for my $arg (@ARGV) {
-	if ($arg =~ /\.gz\z/ && -f $arg) {
-		$arg = fork_to_gzip($arg);
+	if ($arg =~ /\.(gz|bz2)\z/ && -f $arg) {
+		$arg = fork_to_zip($arg,$1);
 	}
 }
 
@@ -38,8 +38,8 @@ exec @ARGV;
 exit 1;
 
 my %PIPES;
-sub fork_to_gzip {
-	my ($gz_fn) = @_;
+sub fork_to_zip {
+	my ($z_fn,$cmd) = @_;
 
 	pipe my $read, my $write
 		or die "cannot pipe: $!\n";
@@ -62,6 +62,7 @@ sub fork_to_gzip {
 	open STDOUT, '>&', $write
 		or die "cannot dup pipe to STDOUT: $!\n";
 
-	exec qw/gzip -cd/, $gz_fn;
+	$cmd =~ s/z/zip/;
+	exec ($cmd,'-cd',$z_fn);
 	exit 1;
 }
