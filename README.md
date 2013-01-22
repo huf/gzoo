@@ -16,11 +16,14 @@ The command is then executed with the new argument list and may do what it will.
 `--kecske` (or `--goat`)
 > What does a goat say in english?
 
-`--version` or `-v`
+`--version`
 > ...
 
 `--help` or `-h`
 > some
+
+`-v` or `-V` or `-x` or `-X` or `-i` or `-I`
+> In case you forget your basic roman numerals.
 
 ## Example
     # you type:

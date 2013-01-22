@@ -6,18 +6,25 @@ use Fcntl;
 
 our $VERSION = '2.9.KECSKE.0-seriously?';
 
-die "$0 v$VERSION\n" if @ARGV and $ARGV[0] eq '--version' || $ARGV[0] eq '-v';
+if (@ARGV) {
+	die "$0 v$VERSION\n" if $ARGV[0] eq '--version';
 
-if (@ARGV and $ARGV[0] eq '--help' || $ARGV[0] eq '-h') {
-	print <<"HALP";
+	if (my ($d) = $ARGV[0] =~ /\A-([vxi])\z/i) {
+		print map { lc $d eq $d ? $_ : uc $_ } {v => "five", x => "ten", i => "one"}->{lc $d};
+		print "\n";
+		exit 50;
+	}
+
+	if ($ARGV[0] eq '--help' || $ARGV[0] eq '-h') {
+		print <<"HALP";
 $0 [OPTIONS] <COMMAND> [ARGS]
-    now go away.
+	now go away.
 HALP
-	exit 0x68;
-}
+		exit 0x68;
+	}
 
-if (@ARGV && $ARGV[0] eq '--cat') {
-	print <<'MEOW';
+	if ($ARGV[0] eq '--cat') {
+		print <<'MEOW';
 THE PROGRAM IS NOW A GIANT CAT!
                       _
                       \`*-.
@@ -37,11 +44,11 @@ THE PROGRAM IS NOW A GIANT CAT!
 
 SEE WHAT YOU DID TO SCARED KITTY?
 MEOW
-	exit 9;
-}
+		exit 9;
+	}
 
-if (@ARGV and $ARGV[0] eq '--goat' || $ARGV[0] eq '--kecske') {
-	print <<'WHAT_DOES_IT_SAY';
+	if ($ARGV[0] eq '--goat' || $ARGV[0] eq '--kecske') {
+		print <<'WHAT_DOES_IT_SAY';
 KECS
       /)  (\
  )\.:::::::::./(
@@ -64,7 +71,8 @@ KECS
      ||(__(__.-._)
 KE
 WHAT_DOES_IT_SAY
-	exit 2;
+		exit 2;
+	}
 }
 
 for my $arg (@ARGV) {
